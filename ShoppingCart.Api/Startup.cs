@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using ShoppingCart.Infrastructure.Configurations;
+using ShoppingCart.Infrastructure.Data.Contexts;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace ShoppingCart.Api
@@ -28,6 +30,13 @@ namespace ShoppingCart.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            var dbSection = Configuration.GetSection("MongoDBConfig");
+            services.Configure<MongoDbConfigurations>(dbSection);
+            var dbOptions = dbSection.Get<MongoDbConfigurations>();
+
+            var shoppingCartContext = new ShoppingCartContext(dbOptions);
+
 
             services.AddSwaggerGen(c =>
             {
