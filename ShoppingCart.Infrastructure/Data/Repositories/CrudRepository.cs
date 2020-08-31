@@ -23,7 +23,7 @@ namespace ShoppingCart.Infrastructure.Data.Repositories
 
         public async Task Add(TEntity entity)
         {
-            await _dbCollection.InsertOneAsync(entity);
+            await Task.Run(() => _dbCollection.InsertOneAsync(entity));
         }
 
         public void Delete(string id)

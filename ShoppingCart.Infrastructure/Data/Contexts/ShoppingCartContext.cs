@@ -10,7 +10,6 @@ namespace ShoppingCart.Infrastructure.Data.Contexts
     public interface IShoppingCartContext
     {
         IMongoCollection<T> GetCollection<T>(string name);
-
         IMongoCollection<Item> Items { get; }
     }
 
@@ -21,8 +20,15 @@ namespace ShoppingCart.Infrastructure.Data.Contexts
 
         public ShoppingCartContext(MongoDbConfigurations config)
         {
-            var connectionString = GetConnectionString(config);
-            _mongoClient = new MongoClient(connectionString);
+            MongoCredential credential = MongoCredential.CreateCredential(config.MasterDatabaseName, config.User, config.Password);
+
+            var settings = new MongoClientSettings
+            {
+                Credential = credential,
+                Server = new MongoServerAddress(config.Host, config.Port)
+            };
+
+            _mongoClient = new MongoClient(settings);
 
             _mongoDatabase = _mongoClient.GetDatabase(config.Database);
         }
@@ -41,7 +47,7 @@ namespace ShoppingCart.Infrastructure.Data.Contexts
             }
             else
             {
-                connectionString = $@"mongodb://{config.User}:{config.Password}@{config.Host}:{config.Port}";
+                connectionString = $@"mongodb://{config.User}:{config.Password}@{config.Host}:{config.Port}/admin";
             }
 
             return connectionString;
