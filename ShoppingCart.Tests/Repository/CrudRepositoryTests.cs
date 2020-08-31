@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace ShoppingCart.Tests
+namespace ShoppingCart.Tests.Repository
 {
     public class CrudRepositoryTests
     {

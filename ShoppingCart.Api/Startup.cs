@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using ShoppingCart.Core.Services;
 using ShoppingCart.Infrastructure.Configurations;
 using ShoppingCart.Infrastructure.Data.Contexts;
 using ShoppingCart.Infrastructure.Data.Repositories;
@@ -38,6 +39,8 @@ namespace ShoppingCart.Api
 
             var shoppingCartContext = new ShoppingCartContext(dbOptions);
             services.AddSingleton<ItemRepository>(new ItemRepository(shoppingCartContext));
+
+            services.AddScoped<IItemService,ItemService>();
 
             services.AddSwaggerGen(c =>
             {
