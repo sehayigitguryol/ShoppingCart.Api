@@ -26,11 +26,14 @@ namespace ShoppingCart.Infrastructure.Data.Repositories
             await Task.Run(() => _dbCollection.InsertOneAsync(entity));
         }
 
-        public void Delete(string id)
+        public async Task<bool> Delete(string id)
         {
             var objectId = new ObjectId(id);
             FilterDefinition<TEntity> filter = Builders<TEntity>.Filter.Eq("_id", objectId);
-            _dbCollection.FindOneAndDelete(filter);
+
+            DeleteResult deleteResult = await _dbCollection.DeleteOneAsync(filter);
+
+            return deleteResult.IsAcknowledged && deleteResult.DeletedCount > 0;
         }
 
         public async Task<TEntity> Find(string id)
@@ -47,9 +50,13 @@ namespace ShoppingCart.Infrastructure.Data.Repositories
             return await entities.ToListAsync();
         }
 
-        public virtual void Update(TEntity entity)
+        public async Task<bool> Update(TEntity entity)
         {
-            _dbCollection.ReplaceOneAsync(Builders<TEntity>.Filter.Eq("_id", entity.Id), entity);
+            ReplaceOneResult updateResult = await _dbCollection.ReplaceOneAsync(
+                filter: g => g.Id == entity.Id,
+                replacement: entity);
+
+            return updateResult.IsAcknowledged && updateResult.ModifiedCount > 0;
         }
     }
 }

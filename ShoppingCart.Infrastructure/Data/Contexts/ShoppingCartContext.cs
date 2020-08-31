@@ -10,6 +10,8 @@ namespace ShoppingCart.Infrastructure.Data.Contexts
     public interface IShoppingCartContext
     {
         IMongoCollection<T> GetCollection<T>(string name);
+
+        void DropDatabase();
         IMongoCollection<Item> Items { get; }
     }
 
@@ -17,9 +19,11 @@ namespace ShoppingCart.Infrastructure.Data.Contexts
     {
         private readonly IMongoDatabase _mongoDatabase;
         private readonly IMongoClient _mongoClient;
+        private readonly MongoDbConfigurations _mongoDbConfigurations;
 
         public ShoppingCartContext(MongoDbConfigurations config)
         {
+            _mongoDbConfigurations = config;
             MongoCredential credential = MongoCredential.CreateCredential(config.MasterDatabaseName, config.User, config.Password);
 
             var settings = new MongoClientSettings
@@ -51,6 +55,11 @@ namespace ShoppingCart.Infrastructure.Data.Contexts
             }
 
             return connectionString;
+        }
+
+        public void DropDatabase()
+        {
+            _mongoClient.DropDatabase(_mongoDbConfigurations.Database);
         }
 
         public IMongoCollection<Item> Items => _mongoDatabase.GetCollection<Item>("Items");

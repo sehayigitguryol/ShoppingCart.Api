@@ -15,12 +15,12 @@ namespace ShoppingCart.Core.Repositories
     {
         Task Add(TEntity entity);
 
-        void Delete(string id);
+        Task<bool> Delete(string id);
 
         Task<TEntity> Find(string id);
 
         Task<IEnumerable<TEntity>> GetAll();
 
-        void Update(TEntity entity);
+        Task<bool> Update(TEntity entity);
     }
 }
