@@ -8,10 +8,6 @@ namespace ShoppingCart.Core.Entities
 {
     public class Cart : BaseEntity
     {
-        [BsonRepresentation(BsonType.ObjectId)]
-        public List<string> Items { get; set; }
-
-        [BsonIgnore]
-        public List<Item> ItemList { get; set; }
+        public List<Item> Items{ get; set; }
     }
 }
