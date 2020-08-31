@@ -9,19 +9,27 @@ namespace ShoppingCart.Infrastructure.Data.Contexts
 {
     public interface IShoppingCartContext
     {
+        IMongoCollection<T> GetCollection<T>(string name);
+
         IMongoCollection<Item> Items { get; }
     }
 
     public class ShoppingCartContext : IShoppingCartContext
     {
         private readonly IMongoDatabase _mongoDatabase;
+        private readonly IMongoClient _mongoClient;
 
         public ShoppingCartContext(MongoDbConfigurations config)
         {
             var connectionString = GetConnectionString(config);
-            var client = new MongoClient(connectionString);
+            _mongoClient = new MongoClient(connectionString);
 
-            _mongoDatabase = client.GetDatabase(config.Database);
+            _mongoDatabase = _mongoClient.GetDatabase(config.Database);
+        }
+
+        public IMongoCollection<T> GetCollection<T>(string name)
+        {
+            return _mongoDatabase.GetCollection<T>(name);
         }
 
         private string GetConnectionString(MongoDbConfigurations config)

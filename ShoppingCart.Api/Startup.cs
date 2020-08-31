@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using ShoppingCart.Infrastructure.Configurations;
 using ShoppingCart.Infrastructure.Data.Contexts;
+using ShoppingCart.Infrastructure.Data.Repositories;
 using Swashbuckle.AspNetCore.SwaggerUI;
 
 namespace ShoppingCart.Api
@@ -36,7 +37,7 @@ namespace ShoppingCart.Api
             var dbOptions = dbSection.Get<MongoDbConfigurations>();
 
             var shoppingCartContext = new ShoppingCartContext(dbOptions);
-
+            services.AddSingleton<ItemRepository>(new ItemRepository(shoppingCartContext));
 
             services.AddSwaggerGen(c =>
             {

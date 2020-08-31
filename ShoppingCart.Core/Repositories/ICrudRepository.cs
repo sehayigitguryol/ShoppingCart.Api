@@ -1,6 +1,8 @@
-﻿using System;
+﻿using ShoppingCart.Core.Entities;
+using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace ShoppingCart.Core.Repositories
 {
@@ -9,15 +11,15 @@ namespace ShoppingCart.Core.Repositories
     /// </summary>
     /// <typeparam name="TEntity">Entity that is stored on DB</typeparam>
     /// <typeparam name="TKey"> key type of entity</typeparam>
-    public interface ICrudRepository<TEntity, TKey> where TEntity : class
+    public interface ICrudRepository<TEntity> where TEntity : BaseEntity
     {
-        void Add(TEntity entity);
+        Task Add(TEntity entity);
 
-        void Delete(TKey id);
+        void Delete(string id);
 
-        TEntity Find(TKey id);
+        Task<TEntity> Find(string id);
 
-        IEnumerable<TEntity> GetAll();
+        Task<IEnumerable<TEntity>> GetAll();
 
         void Update(TEntity entity);
     }
