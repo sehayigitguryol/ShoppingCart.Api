@@ -194,6 +194,67 @@ namespace ShoppingCart.Tests.Repository
         }
 
         [Fact]
+        public async Task CartRepository_UpdateCart_ModifyItemExistingCart_Success()
+        {
+            // Arrange
+            SetupEnvironment();
+            var cartId = "c7f01298c560c211ebe9a73e";
+            var itemId = "d3ab2dfa878227b15f1a0575";
+
+            var item = new Item()
+            {
+                Id = itemId,
+                Name = "Rose",
+                Description = "Thorns",
+                Price = 12,
+                Quantity = 5
+            };
+
+            await _itemRepository.Add(item);
+
+            var cart = new Cart()
+            {
+                Id = cartId,
+                Items = new List<Item>() { item },
+            };
+
+            await _cartRepository.Add(cart);
+
+            int newQuantity = 100;
+            item.Quantity = newQuantity;
+
+            var modifiedCart = new Cart()
+            {
+                Id = cartId,
+                Items = new List<Item>() {
+                    item
+                }
+            };
+
+            // Act
+            var result = await _cartRepository.Update(modifiedCart);
+            var itemSaveResult = await _itemRepository.Update(item);
+
+            // Assert
+            var retrievedCart = await _cartRepository.Find(cartId);
+            var retrievedItem = await _itemRepository.Find(itemId);
+
+            Assert.True(result);
+
+            Assert.NotNull(retrievedCart);
+            Assert.Equal(cart.Id, retrievedCart.Id);
+            Assert.Equal(1, retrievedCart.Items.Count);
+            Assert.NotNull(retrievedItem);
+
+            Assert.Equal("d3ab2dfa878227b15f1a0575", retrievedCart.Items[0].Id);
+            Assert.Equal("Rose", retrievedCart.Items[0].Name);
+            Assert.Equal(newQuantity, retrievedCart.Items[0].Quantity);
+
+            Assert.NotNull(retrievedItem);
+            Assert.Equal(newQuantity, retrievedItem.Quantity);
+        }
+
+        [Fact]
         public async Task CartRepository_UpdateCart_DeleteItemExistingCart_Success()
         {
             // Arrange
