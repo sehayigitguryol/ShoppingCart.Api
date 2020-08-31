@@ -15,6 +15,8 @@ namespace ShoppingCart.Tests.Service
 
         public IItemRepository ItemRepository { get; }
 
+        public ICartRepository CartRepository { get; }
+
         public IItemService ItemService { get; }
 
         public ShoppingCartTester()
@@ -33,6 +35,7 @@ namespace ShoppingCart.Tests.Service
             Context = new ShoppingCartContext(configs);
 
             ItemRepository = new ItemRepository(Context);
+            CartRepository = new CartRepository(Context);
 
             ItemService = new ItemService(ItemRepository);
         }

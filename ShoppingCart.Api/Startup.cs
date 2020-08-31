@@ -39,6 +39,7 @@ namespace ShoppingCart.Api
 
             var shoppingCartContext = new ShoppingCartContext(dbOptions);
             services.AddSingleton<ItemRepository>(new ItemRepository(shoppingCartContext));
+            services.AddSingleton<CartRepository>(new CartRepository(shoppingCartContext));
 
             services.AddScoped<IItemService,ItemService>();
 

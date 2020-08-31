@@ -13,12 +13,11 @@ using Xunit;
 
 namespace ShoppingCart.Tests.Repository
 {
-    public class CrudRepositoryTests
+    public class ItemRepositoryTests
     {
         private ShoppingCartContext _context;
 
         private IItemRepository _itemRepository;
-
 
         private void SetupEnvironment()
         {
