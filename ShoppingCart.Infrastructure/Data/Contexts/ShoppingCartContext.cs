@@ -1,4 +1,5 @@
 ﻿using MongoDB.Driver;
+using ShoppingCart.Core.Entities;
 using ShoppingCart.Infrastructure.Configurations;
 using System;
 using System.Collections.Generic;
@@ -8,19 +9,19 @@ namespace ShoppingCart.Infrastructure.Data.Contexts
 {
     public interface IShoppingCartContext
     {
-
+        IMongoCollection<Item> Items { get; }
     }
 
     public class ShoppingCartContext : IShoppingCartContext
     {
-        private readonly IMongoDatabase mongoDatabase;
+        private readonly IMongoDatabase _mongoDatabase;
 
         public ShoppingCartContext(MongoDbConfigurations config)
         {
             var connectionString = GetConnectionString(config);
             var client = new MongoClient(connectionString);
 
-            mongoDatabase = client.GetDatabase(config.Database);
+            _mongoDatabase = client.GetDatabase(config.Database);
         }
 
         private string GetConnectionString(MongoDbConfigurations config)
@@ -37,5 +38,8 @@ namespace ShoppingCart.Infrastructure.Data.Contexts
 
             return connectionString;
         }
+
+        public IMongoCollection<Item> Items => _mongoDatabase.GetCollection<Item>("Items");
+
     }
 }

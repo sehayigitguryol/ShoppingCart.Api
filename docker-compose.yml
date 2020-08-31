@@ -27,5 +27,5 @@ services:
         depends_on:
             - mongo
         ports:
-            - "25:25"
-            - "5001:443"
+            - "26:25"
+            - "5002:443"
