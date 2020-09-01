@@ -13,6 +13,7 @@ namespace ShoppingCart.Core.Repositories
     /// <typeparam name="TKey"> key type of entity</typeparam>
     public interface ICrudRepository<TEntity> where TEntity : BaseEntity
     {
+
         Task Add(TEntity entity);
 
         Task<bool> Delete(string id);

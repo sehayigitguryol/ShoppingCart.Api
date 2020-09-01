@@ -7,6 +7,9 @@ using System.Text;
 
 namespace ShoppingCart.Infrastructure.Cache
 {
+    /// <summary>
+    /// Cache that used for keeping track of stock information of items
+    /// </summary>
     public class StockCacheInMemory : IStockCache
     {
         private readonly ConcurrentDictionary<string, int> cache = new ConcurrentDictionary<string, int>();

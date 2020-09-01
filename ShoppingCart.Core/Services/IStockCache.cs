@@ -5,6 +5,9 @@ using System.Text;
 
 namespace ShoppingCart.Core.Services
 {
+    /// <summary>
+    /// General key value cache interface
+    /// </summary>
     public interface IStockCache
     {
         int GetStock(string key);

@@ -21,7 +21,10 @@ namespace ShoppingCart.Api.Controllers
             this.cartService = cartService;
         }
 
-
+        /// <summary>
+        /// Initializes default carts, items and stock values.
+        /// </summary>
+        /// <returns>Summary of additions</returns>
         [HttpPost("initialize-default-carts")]
         public async Task<ActionResult<InitializeDefaultCartsResponse>> InitializeDefault()
         {
@@ -29,6 +32,11 @@ namespace ShoppingCart.Api.Controllers
             return Ok(carts);
         }
 
+        /// <summary>
+        /// Adds an item to given cart by amount.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns>Updated cart</returns>
         [HttpPost("add-item")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

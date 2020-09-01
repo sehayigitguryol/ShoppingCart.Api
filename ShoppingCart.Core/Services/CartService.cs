@@ -9,13 +9,19 @@ using System.Threading.Tasks;
 
 namespace ShoppingCart.Core.Services
 {
+    /// <summary>
+    /// Interface of cart service
+    /// </summary>
     public interface ICartService
     {
+        /// <summary>
+        /// Adds an item to cart
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns>Cart if saving is successful, string error message if could not be succeed</returns>
         Task<(Cart, string)> AddItemToCart(AddItemToCartRequest model);
 
         Task<InitializeDefaultCartsResponse> InitializeCarts();
-
-        Task AddCart();
     }
 
     public class CartService : ICartService
@@ -31,21 +37,17 @@ namespace ShoppingCart.Core.Services
             _stockCache = stockCache;
         }
 
-        public async Task AddCart()
-        {
-            var cart = new Cart();
-            await _cartRepository.Add(cart);
-        }
-
         public async Task<(Cart, string)> AddItemToCart(AddItemToCartRequest model)
         {
             var cart = await _cartRepository.Find(model.CartId);
-
+            
+            // Cart is not present in db
             if (cart == null)
             {
                 return (null, "Cart is not found");
             }
 
+            // Item is not present in db
             var itemInDb = await _itemRepository.Find(model.ItemId);
 
             if (itemInDb == null)
@@ -56,11 +58,15 @@ namespace ShoppingCart.Core.Services
             var itemInCart = cart.Items.Where(i => i.Id.Equals(model.ItemId)).FirstOrDefault();
 
             var currentStock = _stockCache.GetStock(model.ItemId);
+
+            // Current stock of item is insufficient
             if (currentStock == 0 || currentStock < model.Amount)
             {
-                return (null, "Insufficent stock");
+                return (null, "Insufficient stock");
             }
 
+            // If item is not in the cart, adds it to cart and sets amount.
+            // If is in the cart, updates its quantity
             if (itemInCart != null)
             {
                 itemInCart.Quantity += model.Amount;
@@ -93,6 +99,10 @@ namespace ShoppingCart.Core.Services
             return (null, "Cart save is failed");
         }
 
+        /// <summary>
+        /// Initializes default state of db
+        /// </summary>
+        /// <returns>Summary of which entites are added</returns>
         public async Task<InitializeDefaultCartsResponse> InitializeCarts()
         {
             var itemIds = new List<string>()

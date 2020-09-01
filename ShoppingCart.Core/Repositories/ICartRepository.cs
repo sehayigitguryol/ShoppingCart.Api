@@ -5,6 +5,9 @@ using System.Text;
 
 namespace ShoppingCart.Core.Repositories
 {
+    /// <summary>
+    /// Interface for Cart Repository
+    /// </summary>
     public interface ICartRepository : ICrudRepository<Cart>
     {
     }
