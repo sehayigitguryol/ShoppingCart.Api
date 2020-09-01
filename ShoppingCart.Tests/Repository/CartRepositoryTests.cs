@@ -243,7 +243,7 @@ namespace ShoppingCart.Tests.Repository
 
             Assert.NotNull(retrievedCart);
             Assert.Equal(cart.Id, retrievedCart.Id);
-            Assert.Equal(1, retrievedCart.Items.Count);
+            Assert.Single(retrievedCart.Items);
             Assert.NotNull(retrievedItem);
 
             Assert.Equal("d3ab2dfa878227b15f1a0575", retrievedCart.Items[0].Id);

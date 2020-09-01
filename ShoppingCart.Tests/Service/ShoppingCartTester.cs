@@ -18,8 +18,6 @@ namespace ShoppingCart.Tests.Service
 
         public ICartRepository CartRepository { get; }
 
-        public IItemService ItemService { get; }
-
         public ICartService CartService { get; }
 
         public IStockCache StockCache { get; }
@@ -44,10 +42,8 @@ namespace ShoppingCart.Tests.Service
             ItemRepository = new ItemRepository(Context);
             CartRepository = new CartRepository(Context);
 
-            ItemService = new ItemService(ItemRepository);
             CartService = new CartService(ItemRepository, CartRepository, StockCache);
-
-        }
+                    }
 
         public void Dispose()
         {

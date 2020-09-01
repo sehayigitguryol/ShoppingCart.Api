@@ -95,7 +95,6 @@ namespace ShoppingCart.Tests.Service
                     Price = 5
                 };
 
-
                 var item2 = new Item()
                 {
                     Name = "Daisy",
