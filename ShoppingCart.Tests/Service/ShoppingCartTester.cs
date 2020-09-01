@@ -1,5 +1,6 @@
 ﻿using ShoppingCart.Core.Repositories;
 using ShoppingCart.Core.Services;
+using ShoppingCart.Infrastructure.Cache;
 using ShoppingCart.Infrastructure.Configurations;
 using ShoppingCart.Infrastructure.Data.Contexts;
 using ShoppingCart.Infrastructure.Data.Repositories;
@@ -21,6 +22,8 @@ namespace ShoppingCart.Tests.Service
 
         public ICartService CartService { get; }
 
+        public IStockCache StockCache { get; }
+
         public ShoppingCartTester()
         {
             var dbGuid = new Guid();
@@ -36,11 +39,13 @@ namespace ShoppingCart.Tests.Service
 
             Context = new ShoppingCartContext(configs);
 
+            StockCache = new StockCacheInMemory();
+
             ItemRepository = new ItemRepository(Context);
             CartRepository = new CartRepository(Context);
 
             ItemService = new ItemService(ItemRepository);
-            CartService = new CartService(ItemRepository, CartRepository);
+            CartService = new CartService(ItemRepository, CartRepository, StockCache);
 
         }
 

@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using ShoppingCart.Core.Services;
+using ShoppingCart.Infrastructure.Cache;
 using ShoppingCart.Infrastructure.Configurations;
 using ShoppingCart.Infrastructure.Data.Contexts;
 using ShoppingCart.Infrastructure.Data.Repositories;
@@ -42,6 +43,8 @@ namespace ShoppingCart.Api
             services.AddSingleton<CartRepository>(new CartRepository(shoppingCartContext));
 
             services.AddScoped<IItemService,ItemService>();
+            services.AddScoped<ICartService, CartService>();
+            services.AddScoped<IStockCache, StockCacheInMemory>();
 
             services.AddSwaggerGen(c =>
             {

@@ -18,11 +18,13 @@ namespace ShoppingCart.Core.Services
     {
         private readonly IItemRepository _itemRepository;
         private readonly ICartRepository _cartRepository;
+        private readonly IStockCache _stockCache;
 
-        public CartService(IItemRepository itemRepository, ICartRepository cartRepository)
+        public CartService(IItemRepository itemRepository, ICartRepository cartRepository, IStockCache stockCache)
         {
             _itemRepository = itemRepository;
             _cartRepository = cartRepository;
+            _stockCache = stockCache;
         }
 
         public async Task<(Cart, string)> AddItemToCart(AddItemToCartModel model)
@@ -34,12 +36,19 @@ namespace ShoppingCart.Core.Services
                 return (null, "Cart is not found");
             }
 
-            var itemInCart = cart.Items.Where(i => i.Id.Equals(model.ItemId)).FirstOrDefault();
             var itemInDb = await _itemRepository.Find(model.ItemId);
 
             if (itemInDb == null)
             {
                 return (null, "Item is not found");
+            }
+
+            var itemInCart = cart.Items.Where(i => i.Id.Equals(model.ItemId)).FirstOrDefault();
+
+            var currentStock = _stockCache.GetStock(model.ItemId);
+            if (currentStock == 0 || currentStock < model.Amount)
+            {
+                return (null, "Insufficent stock");
             }
 
             if (itemInCart != null)
@@ -60,13 +69,7 @@ namespace ShoppingCart.Core.Services
                 cart.Items.Add(itemInCart);
             }
 
-            itemInDb.Quantity -= model.Amount;
-            var itemSaveResult = await _itemRepository.Update(itemInDb);
-
-            if (!itemSaveResult)
-            {
-                return (null, "Item save is failed");
-            }
+            _stockCache.SetStock(model.ItemId, currentStock - model.Amount);
 
             var cartSaveResult = await _cartRepository.Update(cart);
 
