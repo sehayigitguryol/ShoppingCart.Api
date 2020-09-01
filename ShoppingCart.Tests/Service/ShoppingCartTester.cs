@@ -19,6 +19,8 @@ namespace ShoppingCart.Tests.Service
 
         public IItemService ItemService { get; }
 
+        public ICartService CartService { get; }
+
         public ShoppingCartTester()
         {
             var dbGuid = new Guid();
@@ -38,6 +40,8 @@ namespace ShoppingCart.Tests.Service
             CartRepository = new CartRepository(Context);
 
             ItemService = new ItemService(ItemRepository);
+            CartService = new CartService(ItemRepository, CartRepository);
+
         }
 
         public void Dispose()

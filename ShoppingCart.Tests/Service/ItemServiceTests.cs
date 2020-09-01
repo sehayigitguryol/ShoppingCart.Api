@@ -115,7 +115,6 @@ namespace ShoppingCart.Tests.Service
                 // Assert
                 var item1 = new Item()
                 {
-                    Id = "d3ab2dfa878227b15f1a0575",
                     Name = "Rose",
                     Description = "Thorns",
                     Price = 12,
@@ -124,7 +123,6 @@ namespace ShoppingCart.Tests.Service
 
                 var item2 = new Item()
                 {
-                    Id = "3d78df8abb8f04bce61b869b",
                     Name = "Petunia",
                     Description = "Yellow",
                     Price = 12,
@@ -133,7 +131,6 @@ namespace ShoppingCart.Tests.Service
 
                 var item3 = new Item()
                 {
-                    Id = "fab62b09cd8581c44e87ba6a",
                     Name = "Orchid",
                     Description = "White",
                     Price = 12,
@@ -150,7 +147,6 @@ namespace ShoppingCart.Tests.Service
 
                 // Assert
                 Assert.Equal(3, resultItems.Count);
-                Assert.Equal(item1.Id, resultItems.First().Id);
             }
         }
 

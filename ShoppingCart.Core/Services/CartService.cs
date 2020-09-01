@@ -11,7 +11,7 @@ namespace ShoppingCart.Core.Services
 {
     public interface ICartService
     {
-        Task<bool> AddItemToCart(AddItemToCartModel model);
+        Task<(Cart, string)> AddItemToCart(AddItemToCartModel model);
     }
 
     public class CartService : ICartService
@@ -25,13 +25,13 @@ namespace ShoppingCart.Core.Services
             _cartRepository = cartRepository;
         }
 
-        public async Task<bool> AddItemToCart(AddItemToCartModel model)
+        public async Task<(Cart, string)> AddItemToCart(AddItemToCartModel model)
         {
             var cart = await _cartRepository.Find(model.CartId);
 
             if (cart == null)
             {
-                // hata ver
+                return (null, "Cart is not found");
             }
 
             var itemInCart = cart.Items.Where(i => i.Id.Equals(model.ItemId)).FirstOrDefault();
@@ -39,7 +39,7 @@ namespace ShoppingCart.Core.Services
 
             if (itemInDb == null)
             {
-                // Bu yok hata ver
+                return (null, "Item is not found");
             }
 
             if (itemInCart != null)
@@ -56,6 +56,8 @@ namespace ShoppingCart.Core.Services
                     Price = itemInDb.Price,
                     Quantity = model.Amount
                 };
+
+                cart.Items.Add(itemInCart);
             }
 
             itemInDb.Quantity -= model.Amount;
@@ -63,11 +65,19 @@ namespace ShoppingCart.Core.Services
 
             if (!itemSaveResult)
             {
-                // hata ver
+                return (null, "Item save is failed");
             }
 
             var cartSaveResult = await _cartRepository.Update(cart);
-            return cartSaveResult;
+
+            if (cartSaveResult)
+            {
+                var updatedCart = await _cartRepository.Find(model.CartId);
+
+                return (updatedCart, null);
+            }
+
+            return (null, "Cart save is failed");
         }
     }
 }
