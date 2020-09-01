@@ -15,5 +15,17 @@ namespace ShoppingCart.Core.Entities
         public double Price { get; set; }
 
         public int Quantity { get; set; }
+
+        public Item GenerateItem(int quantity)
+        {
+            return new Item()
+            {
+                Id = this.Id,
+                Name = this.Name,
+                Description = this.Description,
+                Price = this.Price,
+                Quantity = quantity
+            };
+        }
     }
 }

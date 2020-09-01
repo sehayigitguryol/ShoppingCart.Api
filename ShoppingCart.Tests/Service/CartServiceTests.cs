@@ -54,7 +54,7 @@ namespace ShoppingCart.Tests.Service
 
                 tester.StockCache.SetStock(item1.Id, item1.Quantity);
 
-                var addModel = new AddItemToCartModel()
+                var addModel = new AddItemToCartRequest()
                 {
                     CartId = cartId,
                     ItemId = item1.Id,
@@ -110,7 +110,7 @@ namespace ShoppingCart.Tests.Service
                 tester.StockCache.SetStock(item1.Id, item1.Quantity);
                 tester.StockCache.SetStock(item2.Id, item2.Quantity);
 
-                var addModel = new AddItemToCartModel()
+                var addModel = new AddItemToCartRequest()
                 {
                     CartId = cart.Id,
                     ItemId = item1.Id,
@@ -173,7 +173,7 @@ namespace ShoppingCart.Tests.Service
                 tester.StockCache.SetStock(item1.Id, item1.Quantity);
                 tester.StockCache.SetStock(item2.Id, item2.Quantity);
 
-                var addModel = new AddItemToCartModel()
+                var addModel = new AddItemToCartRequest()
                 {
                     CartId = cart.Id,
                     ItemId = item1.Id,
@@ -234,7 +234,7 @@ namespace ShoppingCart.Tests.Service
                 tester.StockCache.SetStock(item1.Id, item1.Quantity);
                 tester.StockCache.SetStock(item2.Id, item2.Quantity);
 
-                var addModel = new AddItemToCartModel()
+                var addModel = new AddItemToCartRequest()
                 {
                     CartId = cart.Id,
                     ItemId = item1.Id,
@@ -296,7 +296,7 @@ namespace ShoppingCart.Tests.Service
                 tester.StockCache.SetStock(item1.Id, 20);
                 tester.StockCache.SetStock(item2.Id, 10);
 
-                var addModel = new AddItemToCartModel()
+                var addModel = new AddItemToCartRequest()
                 {
                     CartId = cart.Id,
                     ItemId = item1.Id,
@@ -338,7 +338,7 @@ namespace ShoppingCart.Tests.Service
                 await tester.CartRepository.Add(cart);
 
 
-                var addModel = new AddItemToCartModel()
+                var addModel = new AddItemToCartRequest()
                 {
                     CartId = cart.Id,
                     ItemId = notExistingItemId,

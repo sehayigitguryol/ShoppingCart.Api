@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using ShoppingCart.Core.Repositories;
 using ShoppingCart.Core.Services;
 using ShoppingCart.Infrastructure.Cache;
 using ShoppingCart.Infrastructure.Configurations;
@@ -32,19 +33,19 @@ namespace ShoppingCart.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
 
             var dbSection = Configuration.GetSection("MongoDBConfig");
             services.Configure<MongoDbConfigurations>(dbSection);
             var dbOptions = dbSection.Get<MongoDbConfigurations>();
 
             var shoppingCartContext = new ShoppingCartContext(dbOptions);
-            services.AddSingleton<ItemRepository>(new ItemRepository(shoppingCartContext));
-            services.AddSingleton<CartRepository>(new CartRepository(shoppingCartContext));
+            services.AddSingleton<IItemRepository>(new ItemRepository(shoppingCartContext));
+            services.AddSingleton<ICartRepository>(new CartRepository(shoppingCartContext));
 
             services.AddScoped<ICartService, CartService>();
-            services.AddScoped<IStockCache, StockCacheInMemory>();
+            services.AddSingleton<IStockCache, StockCacheInMemory>();
 
+            services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo()

@@ -24,7 +24,7 @@ namespace ShoppingCart.Tests.Service
 
         public ShoppingCartTester()
         {
-            var dbGuid = new Guid();
+            var dbGuid = Guid.NewGuid();
 
             var configs = new MongoDbConfigurations()
             {
@@ -43,7 +43,7 @@ namespace ShoppingCart.Tests.Service
             CartRepository = new CartRepository(Context);
 
             CartService = new CartService(ItemRepository, CartRepository, StockCache);
-                    }
+        }
 
         public void Dispose()
         {

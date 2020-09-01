@@ -12,7 +12,6 @@ namespace ShoppingCart.Infrastructure.Data.Contexts
         IMongoCollection<T> GetCollection<T>(string name);
 
         void DropDatabase();
-        IMongoCollection<Item> Items { get; }
     }
 
     public class ShoppingCartContext : IShoppingCartContext
@@ -24,6 +23,7 @@ namespace ShoppingCart.Infrastructure.Data.Contexts
         public ShoppingCartContext(MongoDbConfigurations config)
         {
             _mongoDbConfigurations = config;
+
             MongoCredential credential = MongoCredential.CreateCredential(config.MasterDatabaseName, config.User, config.Password);
 
             var settings = new MongoClientSettings
@@ -42,27 +42,10 @@ namespace ShoppingCart.Infrastructure.Data.Contexts
             return _mongoDatabase.GetCollection<T>(name);
         }
 
-        private string GetConnectionString(MongoDbConfigurations config)
-        {
-            string connectionString;
-            if (string.IsNullOrEmpty(config.User) || string.IsNullOrEmpty(config.Password))
-            {
-                connectionString = $@"mongodb://{config.Host}:{config.Port}";
-            }
-            else
-            {
-                connectionString = $@"mongodb://{config.User}:{config.Password}@{config.Host}:{config.Port}/admin";
-            }
-
-            return connectionString;
-        }
-
         public void DropDatabase()
         {
             _mongoClient.DropDatabase(_mongoDbConfigurations.Database);
         }
-
-        public IMongoCollection<Item> Items => _mongoDatabase.GetCollection<Item>("Items");
 
     }
 }
