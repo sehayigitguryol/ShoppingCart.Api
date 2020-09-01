@@ -9,8 +9,17 @@ namespace ShoppingCart.Infrastructure.Data.Contexts
 {
     public interface IShoppingCartContext
     {
+        /// <summary>
+        /// Gets specified mongo collection for given name
+        /// </summary>
+        /// <typeparam name="T">Type of collection</typeparam>
+        /// <param name="name">name of collection</param>
+        /// <returns>Instance of mongo collection by name</returns>
         IMongoCollection<T> GetCollection<T>(string name);
 
+        /// <summary>
+        /// Cleans DB after test
+        /// </summary>
         void DropDatabase();
     }
 
